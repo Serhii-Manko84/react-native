@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as Font from "expo-font";
+import Apploading from "expo-app-loading";
 import {
   TouchableOpacity,
   ImageBackground,
@@ -10,53 +12,119 @@ import {
   Platform,
   KeyboardAvoidingView,
   Keyboard,
+  TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
+
+const initialState = {
+  email: "",
+  password: "",
+};
+
+const loadFont = async () => {
+  await Font.loadAsync({
+    "RobotoSlab-Black": require("./assets/fonts/RobotoSlab-Black.ttf"),
+  });
+};
 
 export default function App() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [isReady, setIsReady] = useState(false);
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 20 * 2
+  );
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 20 * 2;
+
+      setDimensions(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const KeyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    // console.log(state);
+    setState(initialState);
   };
+
+  if (!isReady) {
+    return (
+      <Apploading
+        startAsync={loadFont}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
   return (
-    <View style={styles.container}>
-      <ImageBackground style={styles.image} source={require("./image/Bg.jpg")}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <TouchableWithoutFeedback onPress={KeyboardHide}>
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.image}
+          source={require("./image/Bg.jpg")}
         >
-          <View
-            style={{ ...styles.form, marginBottom: isShowKeyboard ? 20 : 100 }}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
-            <View>
-              <Text style={styles.inputTitle}>E-MAIL</Text>
-              <TextInput
-                style={styles.input}
-                textAlign={"center"}
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-            </View>
-            <View style={{ marginTop: 20 }}>
-              <Text style={styles.inputTitle}>PASSWORD</Text>
-              <TextInput
-                style={styles.input}
-                textAlign={"center"}
-                secureTextEntry={true}
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.btn}
-              onPress={KeyboardHide}
+            <View
+              style={{
+                ...styles.form,
+                marginBottom: isShowKeyboard ? 20 : 280,
+                width: dimensions,
+              }}
             >
-              <Text style={styles.btnTitle}>SIGN IN</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-      <StatusBar style="auto" />
-    </View>
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>Hello again</Text>
+                <Text style={styles.headerTitle}>Welcome to Ukraine</Text>
+              </View>
+              <View>
+                <Text style={styles.inputTitle}>E-MAIL</Text>
+                <TextInput
+                  style={styles.input}
+                  textAlign={"center"}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
+                />
+              </View>
+              <View style={{ marginTop: 20 }}>
+                <Text style={styles.inputTitle}>PASSWORD</Text>
+                <TextInput
+                  style={styles.input}
+                  textAlign={"center"}
+                  secureTextEntry={true}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
+                  }
+                />
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.btn}
+                onPress={KeyboardHide}
+              >
+                <Text style={styles.btnTitle}>SIGN IN</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+        <StatusBar style="auto" />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -70,7 +138,18 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    // alignItems: "center",
+    alignItems: "center",
+  },
+
+  header: {
+    alignItems: "center",
+    marginBottom: 50,
+  },
+
+  headerTitle: {
+    color: "#ffffff",
+    marginBottom: 10,
+    fontSize: 18,
   },
 
   form: {
@@ -113,5 +192,6 @@ const styles = StyleSheet.create({
   btnTitle: {
     color: Platform.OS === "ios" ? "#4169e1" : "#00cca3",
     fontSize: 16,
+    fontFamily: "RobotoSlab-Black",
   },
 });
