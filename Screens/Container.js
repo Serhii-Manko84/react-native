@@ -8,8 +8,8 @@ const Container = ({ children }) => {
 const style = StyleSheet.create({
   container: {
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: "25",
-    borderTopRightRadius: "25",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   },
 });
 
