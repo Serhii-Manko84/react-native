@@ -15,12 +15,11 @@ import {
 } from "react-native";
 
 const initialState = {
-  login: "",
   email: "",
   password: "",
 };
 
-const RegistrationScreen = () => {
+const LoginScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
@@ -58,33 +57,14 @@ const RegistrationScreen = () => {
           <View
             style={{
               ...styles.form,
-              marginBottom: isShowKeyboard ? 20 : 150,
+              marginBottom: isShowKeyboard ? 10 : 50,
               width: dimensions,
             }}
           >
-            <View style={styles.avatarImg}>
-              {/* <Image
-                  source={require("../assets/images/avatar.jpeg")}
-              /> */}
-              <Pressable style={styles.addAvatar}>
-                <AntDesign name="pluscircleo" size={24} color="#FF6C00" />
-              </Pressable>
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Увійти</Text>
             </View>
 
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Реєстрація</Text>
-            </View>
-            <View style={styles.viewInput}>
-              <TextInput
-                placeholder="Логін"
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
-                value={state.login}
-                onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, login: value }))
-                }
-              />
-            </View>
             <View style={styles.viewInput}>
               <TextInput
                 placeholder="Адреса електроної пошти"
@@ -125,7 +105,7 @@ const RegistrationScreen = () => {
               activeOpacity={0.8}
               onPress={KeyboardHide}
             >
-              <Text style={styles.btnTitle}>Зареєструватися</Text>
+              <Text style={styles.btnTitle}>Увійти</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -141,7 +121,7 @@ const RegistrationScreen = () => {
                   display: isShowKeyboard ? "none" : "flex",
                 }}
               >
-                Вже є аккаунт? Увійти
+                Немає акаунта? Зареєструватися
               </Text>
             </TouchableOpacity>
           </View>
@@ -156,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    marginTop: "24%",
+    marginTop: "50%",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -166,26 +146,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-  },
-
-  avatarImg: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    alignSelf: "center",
-    marginTop: -60,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
-
-  addAvatar: {
-    width: 25,
-    height: 25,
-    marginRight: -12.5,
-    marginBottom: 14,
-    backgroundColor: "#fff",
-    borderRadius: 100,
   },
 
   header: {
@@ -265,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+export default LoginScreen;

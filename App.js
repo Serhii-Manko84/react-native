@@ -5,6 +5,7 @@ import AppLoading from "expo-app-loading";
 
 import { ImageBackground, StyleSheet } from "react-native";
 import RegistrationScreen from "./Screens/RegistrationScreen";
+import LoginScreen from "./Screens/LoginScreen";
 
 export const loadFonts = async () => {
   await Font.loadAsync({
@@ -28,6 +29,7 @@ export default function App() {
   return (
     <ImageBackground style={styles.image} source={require("./image/Bg.jpg")}>
       <RegistrationScreen />
+      {/* <LoginScreen /> */}
     </ImageBackground>
   );
 }
