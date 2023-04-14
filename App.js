@@ -1,62 +1,34 @@
 import React from "react";
-import { useCallback, useState, useEffect } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
+import { useState } from "react";
+import * as Font from "expo-font";
+import AppLoading from "expo-app-loading";
 
-import {
-  ImageBackground,
-  TouchableWithoutFeedback,
-  StyleSheet,
-} from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 
-SplashScreen.preventAutoHideAsync();
-
-export default function App() {
-  const [isReady, setIsReady] = useState(false);
-
-  const [fontsLoaded] = useFonts({
+export const loadFonts = async () => {
+  await Font.loadAsync({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
+};
+export default function App() {
+  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    async function prepare() {
-      try {
-        // await Font.loadAsync(Entypo.font);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setIsReady(true);
-      }
-    }
-
-    prepare();
-  }, []);
-
-  const onLayoutRootView = useCallback(async () => {
-    if (isReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [isReady]);
-
-  if (!fontsLoaded) {
-    return null;
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onFinish={() => setIsReady(true)}
+        onError={console.error}
+      />
+    );
   }
 
   return (
-    <>
-      <TouchableWithoutFeedback onPress={KeyboardHide}>
-        <ImageBackground
-          style={styles.image}
-          source={require("./image/Bg.jpg")}
-          onLayout={onLayoutRootView}
-        >
-          <RegistrationScreen />
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-    </>
+    <ImageBackground style={styles.image} source={require("./image/Bg.jpg")}>
+      <RegistrationScreen />
+    </ImageBackground>
   );
 }
 
