@@ -1,33 +1,37 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
-import * as Font from "expo-font";
-import AppLoading from "expo-app-loading";
+
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 import { ImageBackground, StyleSheet } from "react-native";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
 
-export const loadFonts = async () => {
-  await Font.loadAsync({
+SplashScreen.preventAutoHideAsync();
+
+export default function App() {
+  const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
-};
-export default function App() {
-  const [isReady, setIsReady] = useState(false);
 
-  if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setIsReady(true)}
-        onError={console.error}
-      />
-    );
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
   }
 
   return (
-    <ImageBackground style={styles.image} source={require("./image/Bg.jpg")}>
+    <ImageBackground
+      style={styles.image}
+      source={require("./image/Bg.jpg")}
+      onLayout={onLayoutRootView}
+    >
       <RegistrationScreen />
       {/* <LoginScreen /> */}
     </ImageBackground>
