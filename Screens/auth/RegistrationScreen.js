@@ -20,7 +20,7 @@ const initialState = {
   password: "",
 };
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
@@ -134,6 +134,7 @@ const RegistrationScreen = () => {
                 ...styles.btnLog,
                 marginBottom: isShowKeyboard ? 30 : 75,
               }}
+              onPress={() => navigation.navigate("Login")}
             >
               <Text
                 style={{

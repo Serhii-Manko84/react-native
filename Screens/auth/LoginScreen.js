@@ -19,7 +19,7 @@ const initialState = {
   password: "",
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
@@ -120,6 +120,7 @@ const LoginScreen = () => {
                   ...styles.textLog,
                   display: isShowKeyboard ? "none" : "flex",
                 }}
+                onPress={() => navigation.navigate("Register")}
               >
                 Немає акаунта? Зареєструватися
               </Text>
