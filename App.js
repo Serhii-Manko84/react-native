@@ -3,51 +3,10 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ImageBackground, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import RegistrationScreen from "./Screens/auth/RegistrationScreen";
-import LoginScreen from "./Screens/auth/LoginScreen";
-import Home from "./Screens/mainScreens/Home";
-import CommentsScreen from "./Screens/mainScreens/CommentsScreen";
-import CreatePostsScreen from "./Screens/mainScreens/CommentsScreen";
-import MapScreen from "./Screens/mainScreens/MapScreen";
-import PostsScreen from "./Screens/mainScreens/PostsScreen";
-import ProfileScreen from "./Screens/mainScreens/ProfileScreen";
+import { useRoute } from "./router";
 
 SplashScreen.preventAutoHideAsync();
-
-const AuthStack = createStackNavigator();
-const MainTab = createBottomTabNavigator();
-
-const useRoute = (isAuth) => {
-  if (!isAuth) {
-    return (
-      <AuthStack.Navigator initialRouteName="Register">
-        <AuthStack.Screen
-          options={{ headerShown: false }}
-          name="Register"
-          component={RegistrationScreen}
-        />
-        <AuthStack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
-      </AuthStack.Navigator>
-    );
-  }
-  return (
-    <MainTab.Navigator>
-      {/* <MainTab.Screen name="Home" component={Home} /> */}
-      <MainTab.Screen name="PostsScreen" component={PostsScreen} />
-      <MainTab.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-      <MainTab.Screen name="ProfileScreen" component={ProfileScreen} />
-      {/* <MainTab.Screen name="CommentsScreen" component={CommentsScreen} /> */}
-      {/* <MainTab.Screen name="MapScreen" component={MapScreen} /> */}
-    </MainTab.Navigator>
-  );
-};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -56,7 +15,7 @@ export default function App() {
     "Roboto-BoldItalic": require("./assets/fonts/Roboto-BoldItalic.ttf"),
   });
 
-  const routing = useRoute(null);
+  const routing = useRoute();
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {

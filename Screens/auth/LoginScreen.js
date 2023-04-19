@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -40,8 +39,8 @@ const LoginScreen = ({ navigation }) => {
   const KeyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
     setState(initialState);
+    console.log(state);
   };
 
   const passwordToggle = () => {
@@ -103,7 +102,7 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.btn}
               activeOpacity={0.8}
-              onPress={KeyboardHide}
+              onPress={(KeyboardHide, () => navigation.navigate("Home"))}
             >
               <Text style={styles.btnTitle}>Увійти</Text>
             </TouchableOpacity>
