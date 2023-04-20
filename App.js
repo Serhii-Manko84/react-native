@@ -15,7 +15,7 @@ export default function App() {
     "Roboto-BoldItalic": require("./assets/fonts/Roboto-BoldItalic.ttf"),
   });
 
-  const routing = useRoute();
+  const routing = useRoute({});
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {

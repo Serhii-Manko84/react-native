@@ -11,7 +11,7 @@ const MainTab = createBottomTabNavigator();
 
 const HomeScreen = () => {
   return (
-    <MainTab.Navigator tabBarOptions={{ showLabel: false }}>
+    <MainTab.Navigator screenOptions={{ showLabel: false }}>
       <MainTab.Screen
         name="PostsScreen"
         component={PostsScreen}
@@ -56,7 +56,7 @@ const HomeScreen = () => {
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+            <MaterialCommunityIcons name="account" color={color} size={25} />
           ),
         }}
       />
