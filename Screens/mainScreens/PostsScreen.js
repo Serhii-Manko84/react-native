@@ -1,49 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Image } from "react-native";
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const PostsScreen = ({ route }) => {
-  const [posts, setPosts] = useState([]);
+import DefaultScreenPosts from "../nestedScreens/DefaultScreenPosts";
+import CommentsScreen from "../nestedScreens/CommentsScreen";
+import MapScreen from "../nestedScreens/MapScreen";
 
-  useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+const NestedScreen = createNativeStackNavigator();
 
-  console.log("posts", posts);
+const PostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={posts}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.containerPhoto}>
-            <Image source={{ uri: item.photo }} style={styles.postImage} />
-          </View>
-        )}
+    <NestedScreen.Navigator>
+      <NestedScreen.Screen
+        name="DefaultScreen"
+        component={DefaultScreenPosts}
+        options={{ headerShown: false }}
       />
-    </View>
+
+      <NestedScreen.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{ headerShown: false }}
+      />
+
+      <NestedScreen.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ headerShown: false }}
+      />
+    </NestedScreen.Navigator>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-
-  containerPhoto: {
-    marginBottom: 10,
-    marginHorizontal: 16,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  postImage: {
-    marginHorizontal: 16,
-    width: "100%",
-    height: 200,
-  },
-});
 
 export default PostsScreen;

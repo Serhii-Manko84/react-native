@@ -1,22 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Location from "expo-location";
+
+const initialState = {
+  name: "",
+  region: "",
+};
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const [state, setState] = useState(initialState);
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
     console.log("photo", photo);
+
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync();
+    console.log("latitude", location.coords.latitude);
+    console.log("longitude", location.coords.longitude);
   };
 
   const sendPhoto = () => {
     console.log("navigation", navigation);
-    navigation.navigate("PostsScreen", { photo });
+    navigation.navigate("DefaultScreen", { photo, state });
+    setState(initialState);
   };
 
   return (
@@ -30,6 +48,7 @@ const CreatePostsScreen = ({ navigation }) => {
             />
           </View>
         )}
+
         <TouchableOpacity onPress={takePhoto}>
           <View>
             <MaterialCommunityIcons name="camera" color={"#BDBDBD"} size={35} />
@@ -39,11 +58,22 @@ const CreatePostsScreen = ({ navigation }) => {
       <View style={styles.photoBox}>
         <Text style={styles.photoText}>Завантажте фото</Text>
 
-        <TextInput placeholder="Назва..." style={styles.nameText} />
+        <TextInput
+          placeholder="Назва..."
+          style={styles.nameText}
+          value={state.name}
+          onChangeText={(value) =>
+            setState((prevState) => ({ ...prevState, name: value }))
+          }
+        />
 
         <TextInput
           style={styles.regionText}
           placeholder="Місцезнаходження..."
+          value={state.region}
+          onChangeText={(value) =>
+            setState((prevState) => ({ ...prevState, region: value }))
+          }
         />
 
         <TouchableOpacity
