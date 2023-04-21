@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const CreatePostsScreen = () => {
+const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
 
@@ -14,13 +14,18 @@ const CreatePostsScreen = () => {
     console.log("photo", photo);
   };
 
+  const sendPhoto = () => {
+    console.log("navigation", navigation);
+    navigation.navigate("PostsScreen", { photo });
+  };
+
   return (
     <View style={styles.container}>
       <Camera style={styles.camera} ref={setCamera}>
         {photo && (
           <View style={styles.takePhotoContainer}>
             <Image
-              sourse={{ uri: photo }}
+              source={{ uri: photo }}
               style={{ width: 150, height: 150 }}
             />
           </View>
@@ -33,6 +38,21 @@ const CreatePostsScreen = () => {
       </Camera>
       <View style={styles.photoBox}>
         <Text style={styles.photoText}>Завантажте фото</Text>
+
+        <TextInput placeholder="Назва..." style={styles.nameText} />
+
+        <TextInput
+          style={styles.regionText}
+          placeholder="Місцезнаходження..."
+        />
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.sendPhoto}
+          onPress={sendPhoto}
+        >
+          <Text style={styles.sendLabel}>Опублікувати</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -44,10 +64,10 @@ const styles = StyleSheet.create({
   },
 
   camera: {
-    height: "45%",
-    marginTop: 32,
+    height: "40%",
+    marginTop: 30,
     marginHorizontal: 16,
-    borderRadius: 10,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -62,12 +82,47 @@ const styles = StyleSheet.create({
 
   photoBox: {
     marginTop: 10,
-    marginLeft: 16,
+    marginLeft: 15,
   },
 
   photoText: {
     fontSize: 16,
     color: "#BDBDBD",
+  },
+
+  nameText: {
+    fontSize: 16,
+    color: "#BDBDBD",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    marginHorizontal: 16,
+    borderColor: "#E8E8E8",
+    height: 40,
+  },
+  regionText: {
+    fontSize: 16,
+    color: "#BDBDBD",
+    marginTop: 20,
+    borderBottomWidth: 1,
+    marginHorizontal: 16,
+    borderColor: "#E8E8E8",
+    height: 40,
+  },
+
+  sendPhoto: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 25,
+    marginHorizontal: 16,
+    height: 45,
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+  },
+
+  sendLabel: {
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    color: "#fff",
   },
 });
 
