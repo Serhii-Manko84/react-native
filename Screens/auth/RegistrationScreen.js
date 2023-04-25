@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import {
   TouchableOpacity,
@@ -14,6 +15,8 @@ import {
   Pressable,
 } from "react-native";
 
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 const initialState = {
   login: "",
   email: "",
@@ -23,10 +26,12 @@ const initialState = {
 const RegistrationScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 20 * 2
   );
-  const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const onChange = () => {
@@ -38,10 +43,11 @@ const RegistrationScreen = ({ navigation }) => {
     return () => subscription?.remove();
   }, []);
 
-  const KeyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     console.log(state);
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
 
@@ -123,7 +129,7 @@ const RegistrationScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.btn}
               activeOpacity={0.8}
-              onPress={(KeyboardHide, () => navigation.navigate("Home"))}
+              onPress={handleSubmit}
             >
               <Text style={styles.btnTitle}>Зареєструватися</Text>
             </TouchableOpacity>

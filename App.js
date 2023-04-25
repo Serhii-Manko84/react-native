@@ -3,8 +3,10 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ImageBackground, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
 
 import { useRoute } from "./router";
+import { store } from "./redux/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,7 +17,7 @@ export default function App() {
     "Roboto-BoldItalic": require("./assets/fonts/Roboto-BoldItalic.ttf"),
   });
 
-  const routing = useRoute({});
+  const routing = useRoute(false);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -34,7 +36,9 @@ export default function App() {
         source={require("./image/Bg.jpg")}
         onLayout={onLayoutRootView}
       >
-        <NavigationContainer>{routing}</NavigationContainer>
+        <Provider store={store}>
+          <NavigationContainer>{routing}</NavigationContainer>
+        </Provider>
       </ImageBackground>
     </>
   );
