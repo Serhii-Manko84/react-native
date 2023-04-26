@@ -46,7 +46,6 @@ const RegistrationScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
     dispatch(authSignInUser(state));
     setState(initialState);
   };
@@ -56,7 +55,7 @@ const RegistrationScreen = ({ navigation }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={KeyboardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
