@@ -13,6 +13,9 @@ import {
   Pressable,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 const initialState = {
   email: "",
   password: "",
@@ -21,6 +24,7 @@ const initialState = {
 const LoginScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const dispatch = useDispatch();
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 20 * 2
   );
@@ -36,11 +40,16 @@ const LoginScreen = ({ navigation }) => {
     return () => subscription?.remove();
   }, []);
 
+  const handleSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    dispatch(authSignInUser(state));
+    setState(initialState);
+  };
+
   const KeyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setState(initialState);
-    console.log(state);
   };
 
   const passwordToggle = () => {
@@ -102,8 +111,10 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.btn}
               activeOpacity={0.8}
-              onPress={(KeyboardHide, () => navigation.navigate("Home"))}
+              onPress={handleSubmit}
             >
+              {/* () => navigation.navigate("Home") */}
+
               <Text style={styles.btnTitle}>Увійти</Text>
             </TouchableOpacity>
 

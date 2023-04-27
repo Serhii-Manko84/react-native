@@ -15,7 +15,7 @@ import {
   Pressable,
 } from "react-native";
 
-import { authSignInUser } from "../../redux/auth/authOperations";
+import { authCreateUser } from "../../redux/auth/authOperations";
 
 const initialState = {
   login: "",
@@ -46,7 +46,7 @@ const RegistrationScreen = ({ navigation }) => {
   const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    dispatch(authSignInUser(state));
+    dispatch(authCreateUser(state));
     setState(initialState);
   };
 
