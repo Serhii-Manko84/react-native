@@ -1,22 +1,15 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { ImageBackground, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-
-import { useRoute } from "./router";
 import { store } from "./redux/store";
-import { autentification } from "./firebase/config";
+
+import Main from "./components/Main";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [user, setUser] = useState(null);
-
-  autentification.onAuthStateChanged((user) => setUser(user));
-  const routing = useRoute(user);
-
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
@@ -37,11 +30,11 @@ export default function App() {
     <>
       <ImageBackground
         style={styles.image}
-        source={require("./image/Bg.jpg")}
         onLayout={onLayoutRootView}
+        source={require("./image/Bg.jpg")}
       >
         <Provider store={store}>
-          <NavigationContainer>{routing}</NavigationContainer>
+          <Main />
         </Provider>
       </ImageBackground>
     </>
@@ -49,10 +42,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   image: {
     flex: 1,
     resizeMode: "cover",

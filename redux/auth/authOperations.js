@@ -49,4 +49,6 @@ export const authSignInUser =
   };
 
 export const authSignInOutUser = () => async (dispatch, getState) => {};
-export const authStateChangeUser = () => async (dispatch, getState) => {};
+export const authStateChangeUser = () => async (dispatch, getState) => {
+  await autentification.onAuthStateChanged((user) => setUser(user));
+};
