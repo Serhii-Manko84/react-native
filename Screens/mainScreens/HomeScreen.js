@@ -2,14 +2,21 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 
 import CreatePostsScreen from "./CreatePostsScreen";
 import PostsScreen from "./PostsScreen";
 import ProfileScreen from "./ProfileScreen";
+import { authSignInOutUser } from "../../redux/auth/authOperations";
 
 const MainTab = createBottomTabNavigator();
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignInOutUser());
+  };
   return (
     <MainTab.Navigator screenOptions={{ showLabel: false }}>
       <MainTab.Screen
@@ -30,7 +37,7 @@ const HomeScreen = () => {
               color={"#BDBDBD"}
               size={30}
               marginRight={10}
-              onPress={() => alert("logout!")}
+              onPress={signOut}
             />
           ),
           headerTitleStyle: {
