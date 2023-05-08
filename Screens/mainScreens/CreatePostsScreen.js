@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { autentification, db, storage } from "../../firebase/config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const initialState = {
   name: "",
@@ -17,6 +19,9 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync();
+    // console.log("latitude", location.coords.latitude);
+    // console.log("longitude", location.coords.longitude);
     setPhoto(photo.uri);
     console.log("photo", photo);
 
@@ -25,16 +30,32 @@ const CreatePostsScreen = ({ navigation }) => {
       console.log("Permission to access location was denied");
       return;
     }
-
-    const location = await Location.getCurrentPositionAsync();
-    console.log("latitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
   };
 
   const sendPhoto = () => {
-    console.log("navigation", navigation);
+    uploadPhotoToServer();
     navigation.navigate("DefaultScreen", { photo, state });
     setState(initialState);
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+
+    const storageRef = ref(storage, `images/${uniquePostId}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    return url;
+
+    // const storageRef = ref(storage, "photo");
+    // uploadBytes(storageRef, photo)
+    //   .then((snapshot) => {
+    //     console.log("Uploaded a blob or file!");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.message);
+    //   });
   };
 
   return (
