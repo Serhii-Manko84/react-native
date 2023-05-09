@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -16,20 +16,24 @@ const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [state, setState] = useState(initialState);
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      const location = await Location.getCurrentPositionAsync({});
+      // console.log("latitude", location.coords.latitude);
+      // console.log("longitude", location.coords.longitude);
+      setLocation(location);
+    })();
+  }, []);
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
-    // console.log("latitude", location.coords.latitude);
-    // console.log("longitude", location.coords.longitude);
-    setPhoto(photo.uri);
-    console.log("photo", photo);
+    const location = await Location.getCurrentPositionAsync({});
 
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
-      return;
-    }
+    setPhoto(photo.uri);
   };
 
   const sendPhoto = () => {
@@ -45,17 +49,8 @@ const CreatePostsScreen = ({ navigation }) => {
 
     const storageRef = ref(storage, `images/${uniquePostId}`);
     await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    return url;
-
-    // const storageRef = ref(storage, "photo");
-    // uploadBytes(storageRef, photo)
-    //   .then((snapshot) => {
-    //     console.log("Uploaded a blob or file!");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.message);
-    //   });
+    const processedPhoto = await getDownloadURL(storageRef);
+    console.log("processedPhoto", processedPhoto);
   };
 
   return (
