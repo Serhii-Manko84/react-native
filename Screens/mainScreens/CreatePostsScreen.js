@@ -5,7 +5,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { autentification, db, storage } from "../../firebase/config";
+import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useSelector } from "react-redux";
 
 const initialState = {
   name: "",
@@ -18,28 +20,40 @@ const CreatePostsScreen = ({ navigation }) => {
   const [state, setState] = useState(initialState);
   const [location, setLocation] = useState(null);
 
+  const { userID, login } = useSelector((state) => state.auth);
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-
-      const location = await Location.getCurrentPositionAsync({});
-      // console.log("latitude", location.coords.latitude);
-      // console.log("longitude", location.coords.longitude);
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+      let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
   }, []);
 
   const takePhoto = async () => {
+    console.log(location);
     const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync({});
-
     setPhoto(photo.uri);
   };
 
   const sendPhoto = () => {
-    uploadPhotoToServer();
+    uploadPostToServer();
     navigation.navigate("DefaultScreen", { photo, state });
     setState(initialState);
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await addDoc(collection(db, "posts"), {
+      photo,
+      state,
+      location: location.coords,
+      userID,
+      login,
+    });
   };
 
   const uploadPhotoToServer = async () => {
@@ -50,7 +64,7 @@ const CreatePostsScreen = ({ navigation }) => {
     const storageRef = ref(storage, `images/${uniquePostId}`);
     await uploadBytes(storageRef, file);
     const processedPhoto = await getDownloadURL(storageRef);
-    console.log("processedPhoto", processedPhoto);
+    return processedPhoto;
   };
 
   return (
