@@ -41,7 +41,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const sendPhoto = () => {
     uploadPostToServer();
-    navigation.navigate("DefaultScreen", { photo, state });
+    navigation.navigate("DefaultScreen");
     setState(initialState);
   };
 

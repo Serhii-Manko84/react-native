@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, Image, Button } from "react-native";
+import { db } from "../../firebase/config";
+import { collection, onSnapshot } from "firebase/firestore";
 
 const DefaultScreenPosts = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getAllPost();
+  }, []);
+
+  const getAllPost = async () => {
+    await onSnapshot(collection(db, "posts"), (data) =>
+      setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    );
+  };
 
   console.log("posts", posts);
   return (
