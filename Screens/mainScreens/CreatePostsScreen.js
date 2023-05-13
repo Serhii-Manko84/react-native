@@ -4,7 +4,7 @@ import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import { autentification, db, storage } from "../../firebase/config";
+import { db, storage } from "../../firebase/config";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useSelector } from "react-redux";
@@ -28,15 +28,16 @@ const CreatePostsScreen = ({ navigation }) => {
       if (status !== "granted") {
         console.log("Permission to access location was denied");
       }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      let locationRes = await Location.getCurrentPositionAsync({});
+      setLocation(locationRes);
     })();
   }, []);
 
   const takePhoto = async () => {
-    console.log(location);
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
+    // console.log("photo.uri", photo.uri);
+    // console.log("location", location);
   };
 
   const sendPhoto = () => {

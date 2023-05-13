@@ -16,17 +16,8 @@ const PostsScreen = () => {
         options={{ headerShown: false }}
       />
 
-      <NestedScreen.Screen
-        name="Comments"
-        component={CommentsScreen}
-        options={{ headerShown: false }}
-      />
-
-      <NestedScreen.Screen
-        name="Map"
-        component={MapScreen}
-        options={{ headerShown: false }}
-      />
+      <NestedScreen.Screen name="CommentsScreen" component={CommentsScreen} />
+      <NestedScreen.Screen name="MapScreen" component={MapScreen} />
     </NestedScreen.Navigator>
   );
 };

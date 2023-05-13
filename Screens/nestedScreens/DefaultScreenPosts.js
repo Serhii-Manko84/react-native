@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Image, Button } from "react-native";
+import { View, StyleSheet, FlatList, Image, Text } from "react-native";
 import { db } from "../../firebase/config";
 import { collection, onSnapshot } from "firebase/firestore";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const DefaultScreenPosts = ({ route, navigation }) => {
+const DefaultScreenPosts = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -16,7 +17,6 @@ const DefaultScreenPosts = ({ route, navigation }) => {
     );
   };
 
-  console.log("posts", posts);
   return (
     <View style={styles.container}>
       <FlatList
@@ -25,13 +25,30 @@ const DefaultScreenPosts = ({ route, navigation }) => {
         renderItem={({ item }) => (
           <View style={styles.containerPhoto}>
             <Image source={{ uri: item.photo }} style={styles.postImage} />
+            <View>
+              <Text style={styles.title}>{item.comment}</Text>
+            </View>
+            <View style={styles.btnNavigation}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.sendNavigate}
+                onPress={() =>
+                  navigation.navigate("MapScreen", { location: item.location })
+                }
+              >
+                <Text style={styles.sendText}>Go to Map</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.sendNavigate}
+                onPress={() => navigation.navigate("CommentsScreen")}
+              >
+                <Text style={styles.sendText}>Go to Comments</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
-      />
-      <Button title="go to Map" onPress={() => navigation.navigate("Map")} />
-      <Button
-        title="go to Comments"
-        onPress={() => navigation.navigate("Comments")}
       />
     </View>
   );
@@ -55,8 +72,31 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
   },
-  btnNabigation: {
+
+  title: {
+    fontFamily: "Roboto-BoldItalic",
+    fontSize: 16,
+    backgroundColor: "tomato",
+  },
+
+  btnNavigation: {
     marginHorizontal: 16,
+  },
+  sendNavigate: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    marginHorizontal: 16,
+    height: 45,
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+  },
+
+  sendText: {
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    color: "#fff",
+    marginHorizontal: 10,
   },
 });
 
