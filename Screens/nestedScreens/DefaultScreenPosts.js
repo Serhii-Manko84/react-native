@@ -25,9 +25,9 @@ const DefaultScreenPosts = ({ navigation, route }) => {
         renderItem={({ item }) => (
           <View style={styles.containerPhoto}>
             <Image source={{ uri: item.photo }} style={styles.postImage} />
-            <View>
-              <Text style={styles.title}>{item.comment}</Text>
-            </View>
+            {/* <View style={styles.containerComment}>
+              <Text style={styles.titleComment}>{item.comment}</Text>
+            </View> */}
             <View style={styles.btnNavigation}>
               <TouchableOpacity
                 activeOpacity={0.8}
@@ -42,7 +42,9 @@ const DefaultScreenPosts = ({ navigation, route }) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.sendNavigate}
-                onPress={() => navigation.navigate("CommentsScreen")}
+                onPress={() =>
+                  navigation.navigate("CommentsScreen", { postId: item.id })
+                }
               >
                 <Text style={styles.sendText}>Go to Comments</Text>
               </TouchableOpacity>
@@ -73,11 +75,20 @@ const styles = StyleSheet.create({
     height: 200,
   },
 
-  title: {
-    fontFamily: "Roboto-BoldItalic",
-    fontSize: 16,
-    backgroundColor: "tomato",
-  },
+  // containerComment: {
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   marginTop: 10,
+  //   marginHorizontal: 16,
+  //   height: 45,
+  //   backgroundColor: "#FF6C00",
+  //   borderRadius: 50,
+  // },
+
+  // titleComment: {
+  //   fontFamily: "Roboto-BoldItalic",
+  //   fontSize: 16,
+  // },
 
   btnNavigation: {
     marginHorizontal: 16,

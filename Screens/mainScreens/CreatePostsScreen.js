@@ -36,8 +36,6 @@ const CreatePostsScreen = ({ navigation }) => {
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
-    // console.log("photo.uri", photo.uri);
-    // console.log("location", location);
   };
 
   const sendPhoto = () => {
