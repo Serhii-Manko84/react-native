@@ -75,21 +75,6 @@ const styles = StyleSheet.create({
     height: 200,
   },
 
-  // containerComment: {
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   marginTop: 10,
-  //   marginHorizontal: 16,
-  //   height: 45,
-  //   backgroundColor: "#FF6C00",
-  //   borderRadius: 50,
-  // },
-
-  // titleComment: {
-  //   fontFamily: "Roboto-BoldItalic",
-  //   fontSize: 16,
-  // },
-
   btnNavigation: {
     marginHorizontal: 16,
   },
