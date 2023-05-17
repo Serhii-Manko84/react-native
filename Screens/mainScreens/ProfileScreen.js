@@ -38,16 +38,16 @@ const ProfileScreen = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.sendNavigate}
-          onPress={() => navigation.navigate("DefaultScreen")}
+          onPress={() => signOut()}
         >
-          <Text style={styles.sendText}>Go to PostScreen</Text>
+          <Text style={styles.sendText}>SignOut</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.sendNavigate}
-          onPress={() => signOut()}
+          onPress={() => navigation.navigate("DefaultScreen")}
         >
-          <Text style={styles.sendText}>Sign Out</Text>
+          <Text style={styles.sendText}>Go to PostScreen</Text>
         </TouchableOpacity>
       </View>
       <View>
