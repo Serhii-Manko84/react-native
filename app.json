@@ -1,22 +1,23 @@
 {
   "expo": {
-    "name": "myNewProject",
-    "slug": "myNewProject",
+    "name": "MyNewProject App",
+    "slug": "myNewProject-app",
+    "description": "This is the my New Project",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-react-native.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-react-native.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
-     "jsEngine": "hermes",
+    "jsEngine": "hermes",
     "ios": {
-       "jsEngine": "jsc",
+      "jsEngine": "jsc",
       "supportsTablet": true
     },
     "android": {
@@ -28,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bd522ec9-1d31-47f2-b838-cd6c0d4add3e"
+      }
     }
   }
 }
