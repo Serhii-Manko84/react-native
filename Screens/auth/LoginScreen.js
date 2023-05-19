@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   Pressable,
+  ImageBackground,
 } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -57,88 +58,93 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={KeyboardHide}>
-      <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <View
-            style={{
-              ...styles.form,
-              marginBottom: isShowKeyboard ? 10 : 50,
-              width: dimensions,
-            }}
+    <ImageBackground
+      style={styles.imageBGPicture}
+      source={require("../../image/Bg.jpg")}
+    >
+      <TouchableWithoutFeedback onPress={KeyboardHide}>
+        <View style={styles.container}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Увійти</Text>
-            </View>
+            <View
+              style={{
+                ...styles.form,
+                marginBottom: isShowKeyboard ? 10 : 50,
+                width: dimensions,
+              }}
+            >
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>Увійти</Text>
+              </View>
 
-            <View style={styles.viewInput}>
-              <TextInput
-                placeholder="Адреса електроної пошти"
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
-                value={state.email}
-                onChangeText={(value) =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    email: value,
-                  }))
-                }
-              />
-            </View>
-            <View style={styles.viewInput}>
-              <TextInput
-                style={styles.input}
-                placeholder="Пароль"
-                textAlign={"left"}
-                secureTextEntry={isSecureTextEntry}
-                onFocus={() => setIsShowKeyboard(true)}
-                value={state.password}
-                onChangeText={(value) =>
-                  setState((prevState) => ({
-                    ...prevState,
-                    password: value,
-                  }))
-                }
-              />
-              <TouchableOpacity activeOpacity={0.8} style={styles.btnPass}>
-                <Text style={styles.textPass} onPress={passwordToggle}>
-                  Показати
+              <View style={styles.viewInput}>
+                <TextInput
+                  placeholder="Адреса електроної пошти"
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      email: value,
+                    }))
+                  }
+                />
+              </View>
+              <View style={styles.viewInput}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Пароль"
+                  textAlign={"left"}
+                  secureTextEntry={isSecureTextEntry}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
+                  }
+                />
+                <TouchableOpacity activeOpacity={0.8} style={styles.btnPass}>
+                  <Text style={styles.textPass} onPress={passwordToggle}>
+                    Показати
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.btn}
+                activeOpacity={0.8}
+                onPress={handleSubmit}
+              >
+                {/* () => navigation.navigate("Home") */}
+
+                <Text style={styles.btnTitle}>Увійти</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={{
+                  ...styles.btnLog,
+                  marginBottom: isShowKeyboard ? 30 : 75,
+                }}
+              >
+                <Text
+                  style={{
+                    ...styles.textLog,
+                    display: isShowKeyboard ? "none" : "flex",
+                  }}
+                  onPress={() => navigation.navigate("Register")}
+                >
+                  Немає акаунта? Зареєструватися
                 </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.btn}
-              activeOpacity={0.8}
-              onPress={handleSubmit}
-            >
-              {/* () => navigation.navigate("Home") */}
-
-              <Text style={styles.btnTitle}>Увійти</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={{
-                ...styles.btnLog,
-                marginBottom: isShowKeyboard ? 30 : 75,
-              }}
-            >
-              <Text
-                style={{
-                  ...styles.textLog,
-                  display: isShowKeyboard ? "none" : "flex",
-                }}
-                onPress={() => navigation.navigate("Register")}
-              >
-                Немає акаунта? Зареєструватися
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
-    </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
@@ -150,6 +156,11 @@ const styles = StyleSheet.create({
     marginTop: "55%",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+  },
+
+  imageBGPicture: {
+    flex: 1,
+    resizeMode: "cover",
   },
 
   form: {

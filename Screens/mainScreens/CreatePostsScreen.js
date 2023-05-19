@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import * as Location from "expo-location";
 import { db, storage } from "../../firebase/config";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useSelector } from "react-redux";
 
 const initialState = {
   name: "",
@@ -44,17 +52,7 @@ const CreatePostsScreen = ({ navigation }) => {
     setState(initialState);
   };
 
-  const uploadPostToServer = async () => {
-    const photo = await uploadPhotoToServer();
-    const createPost = await addDoc(collection(db, "posts"), {
-      photo,
-      state,
-      location: location.coords,
-      userID,
-      login,
-    });
-  };
-
+  //   завантаження фото на firebase
   const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
@@ -64,6 +62,18 @@ const CreatePostsScreen = ({ navigation }) => {
     await uploadBytes(storageRef, file);
     const processedPhoto = await getDownloadURL(storageRef);
     return processedPhoto;
+  };
+
+  //   завантаження всього допису на firebase
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await addDoc(collection(db, "posts"), {
+      photo,
+      state,
+      location: location.coords,
+      userID,
+      login,
+    });
   };
 
   return (
@@ -84,6 +94,7 @@ const CreatePostsScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </Camera>
+
       <View style={styles.photoBox}>
         <Text style={styles.photoText}>Завантажте фото</Text>
 
