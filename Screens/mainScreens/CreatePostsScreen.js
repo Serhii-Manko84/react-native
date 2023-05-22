@@ -37,7 +37,12 @@ const CreatePostsScreen = ({ navigation }) => {
         console.log("Permission to access location was denied");
       }
       let locationRes = await Location.getCurrentPositionAsync({});
+      // let coords = {
+      //   latitude: locationOfPhoto.coords.latitude,
+      //   longitude: locationOfPhoto.coords.longitude,
+      // };
       setLocation(locationRes);
+      console.log("locationRes: ", locationRes);
     })();
   }, []);
 
@@ -50,6 +55,7 @@ const CreatePostsScreen = ({ navigation }) => {
     uploadPostToServer();
     navigation.navigate("DefaultScreen");
     setState(initialState);
+    setPhoto(null);
   };
 
   //   завантаження фото на firebase
@@ -78,7 +84,27 @@ const CreatePostsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} ref={setCamera}>
+      {photo ? (
+        <View style={styles.photoContainer}>
+          <Image source={{ uri: photo }} style={{ width: 150, height: 150 }} />
+          <TouchableOpacity
+            style={styles.changeBtn}
+            onPress={() => {
+              setPhoto(null), setLocation(null);
+            }}
+          >
+            <Text style={{ color: "#fff" }}>New Photo</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <Camera ref={setCamera} style={styles.camera}>
+          <TouchableOpacity onPress={takePhoto}>
+            <MaterialCommunityIcons name="camera" color={"#BDBDBD"} size={35} />
+          </TouchableOpacity>
+        </Camera>
+      )}
+
+      {/* <Camera style={styles.camera} ref={setCamera}>
         {photo && (
           <View style={styles.takePhotoContainer}>
             <Image
@@ -93,11 +119,9 @@ const CreatePostsScreen = ({ navigation }) => {
             <MaterialCommunityIcons name="camera" color={"#BDBDBD"} size={35} />
           </View>
         </TouchableOpacity>
-      </Camera>
+      </Camera> */}
 
       <View style={styles.photoBox}>
-        <Text style={styles.photoText}>Завантажте фото</Text>
-
         <TextInput
           placeholder="Назва..."
           style={styles.nameText}
@@ -132,6 +156,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
   },
+  photoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 16,
+    marginTop: 32,
+  },
+  changeBtn: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 30,
+    marginBottom: 16,
+
+    height: 50,
+    width: 150,
+    borderWidth: 1,
+    borderRadius: 100,
+    borderColor: "#FF6C00",
+    backgroundColor: "#FF6C00",
+  },
 
   camera: {
     height: "40%",
@@ -153,11 +196,6 @@ const styles = StyleSheet.create({
   photoBox: {
     marginTop: 10,
     marginLeft: 15,
-  },
-
-  photoText: {
-    fontSize: 16,
-    color: "#BDBDBD",
   },
 
   nameText: {
