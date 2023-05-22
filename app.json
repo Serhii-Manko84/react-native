@@ -2,6 +2,7 @@
   "expo": {
     "name": "MyNewProject App",
     "slug": "myNewProject-app",
+    "privacy": "public",
     "description": "This is the my New Project",
     "version": "3.0.0",
     "orientation": "default",
